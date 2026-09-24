@@ -2,6 +2,6 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  base: '/Pet_Adoption_Platform/',
+  base: '/pet-adoption-app/',
   plugins: [react()],
 })
