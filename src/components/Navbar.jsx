@@ -17,10 +17,16 @@ function Navbar() {
   useEffect(() => {
     updateLoginStatus();
 
-    window.addEventListener("hashchange", updateLoginStatus);
+    window.addEventListener(
+      "hashchange",
+      updateLoginStatus
+    );
 
     return () => {
-      window.removeEventListener("hashchange", updateLoginStatus);
+      window.removeEventListener(
+        "hashchange",
+        updateLoginStatus
+      );
     };
   }, []);
 
@@ -29,6 +35,7 @@ function Navbar() {
   };
 
   const handleLogout = () => {
+    // Remove all login information
     localStorage.removeItem("adminLoggedIn");
     localStorage.removeItem("loggedInUser");
     localStorage.removeItem("userLoggedIn");
@@ -36,11 +43,14 @@ function Navbar() {
     setAdminLoggedIn(false);
     setUserLoggedIn(false);
 
+    // Return to home page
     window.location.hash = "";
   };
 
   return (
     <nav className="navbar">
+
+      {/* Logo */}
       <div
         className="logo"
         onClick={() => navigate("home")}
@@ -50,6 +60,8 @@ function Navbar() {
       </div>
 
       <div className="nav-links">
+
+        {/* Home */}
         <a
           href="#home"
           onClick={() => navigate("home")}
@@ -57,18 +69,35 @@ function Navbar() {
           Home
         </a>
 
+        {/* ========================= */}
         {/* NOT LOGGED IN */}
+        {/* ========================= */}
+
         {!adminLoggedIn && !userLoggedIn && (
           <>
-            <a href="#login">Login</a>
-            <a href="#signup">Signup</a>
+            <a href="#login">
+              Login
+            </a>
+
+            <a href="#signup">
+              Signup
+            </a>
+
+            <a href="#admin-login">
+              Admin Login
+            </a>
           </>
         )}
 
+        {/* ========================= */}
         {/* USER LOGGED IN */}
+        {/* ========================= */}
+
         {userLoggedIn && !adminLoggedIn && (
           <>
-            <a href="#dashboard">Dashboard</a>
+            <a href="#dashboard">
+              Dashboard
+            </a>
 
             <a href="#applications">
               Applications
@@ -84,7 +113,10 @@ function Navbar() {
           </>
         )}
 
+        {/* ========================= */}
         {/* ADMIN LOGGED IN */}
+        {/* ========================= */}
+
         {adminLoggedIn && (
           <>
             <a href="#admin-dashboard">
@@ -100,6 +132,7 @@ function Navbar() {
             </button>
           </>
         )}
+
       </div>
     </nav>
   );

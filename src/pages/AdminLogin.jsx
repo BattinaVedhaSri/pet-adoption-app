@@ -1,9 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 function AdminLogin() {
-  const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -12,14 +9,19 @@ function AdminLogin() {
     e.preventDefault();
     setError("");
 
+    // Admin credentials
     if (
       email.trim() === "admin@petadopt.com" &&
       password === "admin123"
     ) {
+      // Store admin login status
       localStorage.setItem("adminLoggedIn", "true");
-      localStorage.removeItem("userLoggedIn");
 
-      navigate("/admin-dashboard");
+      // Remove any existing user login
+      localStorage.removeItem("loggedInUser");
+
+      // Navigate using hash routing
+      window.location.hash = "admin-dashboard";
     } else {
       setError("Invalid admin email or password");
     }
@@ -28,10 +30,13 @@ function AdminLogin() {
   return (
     <div className="login-container">
       <div className="login-box">
+
         <h2>🐾 Admin Login</h2>
+
         <p>Welcome Admin!</p>
 
         <form onSubmit={handleLogin}>
+
           <input
             type="email"
             placeholder="Enter Admin Email"
@@ -51,13 +56,20 @@ function AdminLogin() {
           <button type="submit">
             🔐 Login as Admin
           </button>
+
         </form>
 
         {error && (
-          <p style={{ color: "red", marginTop: "10px" }}>
+          <p
+            style={{
+              color: "red",
+              marginTop: "10px",
+            }}
+          >
             {error}
           </p>
         )}
+
       </div>
     </div>
   );

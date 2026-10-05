@@ -34,20 +34,19 @@ function App() {
       "#dashboard",
       "#adoption",
       "#applications",
-      "#communication"
+      "#communication",
     ];
 
     const adminPages = [
       "#admin-dashboard",
-      "#admin-applications"
+      "#admin-applications",
     ];
 
-    const loggedInUser =
-      localStorage.getItem("loggedInUser");
+    const loggedInUser = localStorage.getItem("loggedInUser");
 
-    const adminLoggedIn =
-      localStorage.getItem("adminLoggedIn");
+    const adminLoggedIn = localStorage.getItem("adminLoggedIn");
 
+    // Protect user pages
     if (
       userPages.includes(page) &&
       !loggedInUser
@@ -56,6 +55,7 @@ function App() {
       return;
     }
 
+    // Protect admin pages
     if (
       adminPages.includes(page) &&
       adminLoggedIn !== "true"
