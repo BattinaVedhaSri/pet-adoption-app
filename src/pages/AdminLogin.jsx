@@ -1,39 +1,40 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function AdminLogin() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
+    setError("");
 
     if (
-      email === "admin@petadopt.com" &&
+      email.trim() === "admin@petadopt.com" &&
       password === "admin123"
     ) {
       localStorage.setItem("adminLoggedIn", "true");
-      setMessage("Admin login successful!");
+      localStorage.removeItem("userLoggedIn");
 
-      setTimeout(() => {
-        window.location.hash = "admin-dashboard";
-      }, 500);
+      navigate("/admin-dashboard");
     } else {
-      setMessage("Invalid admin email or password.");
+      setError("Invalid admin email or password");
     }
   };
 
   return (
-    <section className="auth-section" id="admin-login">
-      <div className="auth-card">
-        <h2>👨‍💼 Admin Login</h2>
-
-        <p>Login to manage the adoption platform</p>
+    <div className="login-container">
+      <div className="login-box">
+        <h2>🐾 Admin Login</h2>
+        <p>Welcome Admin!</p>
 
         <form onSubmit={handleLogin}>
           <input
             type="email"
-            placeholder="Admin Email"
+            placeholder="Enter Admin Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -41,22 +42,24 @@ function AdminLogin() {
 
           <input
             type="password"
-            placeholder="Admin Password"
+            placeholder="Enter Admin Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
 
-          <button type="submit" className="auth-btn">
-            Admin Login
+          <button type="submit">
+            🔐 Login as Admin
           </button>
         </form>
 
-        {message && (
-          <p className="success-message">{message}</p>
+        {error && (
+          <p style={{ color: "red", marginTop: "10px" }}>
+            {error}
+          </p>
         )}
       </div>
-    </section>
+    </div>
   );
 }
 
