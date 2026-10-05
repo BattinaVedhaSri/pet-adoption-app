@@ -1,57 +1,82 @@
-```jsx
-import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 function Navbar() {
-  const navigate = useNavigate();
-  const location = useLocation();
-
   const [adminLoggedIn, setAdminLoggedIn] = useState(false);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
 
-  useEffect(() => {
+  const updateLoginStatus = () => {
     setAdminLoggedIn(
       localStorage.getItem("adminLoggedIn") === "true"
     );
 
     setUserLoggedIn(
-      localStorage.getItem("userLoggedIn") === "true"
+      localStorage.getItem("loggedInUser") !== null
     );
-  }, [location]);
+  };
+
+  useEffect(() => {
+    updateLoginStatus();
+
+    window.addEventListener("hashchange", updateLoginStatus);
+
+    return () => {
+      window.removeEventListener("hashchange", updateLoginStatus);
+    };
+  }, []);
+
+  const navigate = (path) => {
+    window.location.hash = path;
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("adminLoggedIn");
+    localStorage.removeItem("loggedInUser");
     localStorage.removeItem("userLoggedIn");
 
     setAdminLoggedIn(false);
     setUserLoggedIn(false);
 
-    navigate("/");
+    window.location.hash = "";
   };
 
   return (
     <nav className="navbar">
-      <div className="logo">
+      <div
+        className="logo"
+        onClick={() => navigate("home")}
+        style={{ cursor: "pointer" }}
+      >
         🐾 Best Friend
       </div>
 
       <div className="nav-links">
-        <Link to="/">Home</Link>
+        <a
+          href="#home"
+          onClick={() => navigate("home")}
+        >
+          Home
+        </a>
 
         {/* NOT LOGGED IN */}
         {!adminLoggedIn && !userLoggedIn && (
           <>
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Signup</Link>
+            <a href="#login">Login</a>
+            <a href="#signup">Signup</a>
           </>
         )}
 
         {/* USER LOGGED IN */}
         {userLoggedIn && !adminLoggedIn && (
           <>
-            <Link to="/user-dashboard">Dashboard</Link>
-            <Link to="/applications">Applications</Link>
-            <Link to="/communication">Communication</Link>
+            <a href="#dashboard">Dashboard</a>
+
+            <a href="#applications">
+              Applications
+            </a>
+
+            <a href="#communication">
+              Communication
+            </a>
 
             <button onClick={handleLogout}>
               Logout
@@ -62,13 +87,13 @@ function Navbar() {
         {/* ADMIN LOGGED IN */}
         {adminLoggedIn && (
           <>
-            <Link to="/admin-dashboard">
+            <a href="#admin-dashboard">
               Admin Dashboard
-            </Link>
+            </a>
 
-            <Link to="/admin-applications">
+            <a href="#admin-applications">
               Applications
-            </Link>
+            </a>
 
             <button onClick={handleLogout}>
               Logout
@@ -81,4 +106,3 @@ function Navbar() {
 }
 
 export default Navbar;
-```
